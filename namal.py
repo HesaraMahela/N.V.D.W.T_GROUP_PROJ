@@ -62,7 +62,7 @@ while True:
             line = ser.readline().decode() # arduino returns a line and it's as bytes thus converting to a string
 
             line=line.split(',')   # line has comma separated values thus splitting by them and taking a list of data
-            time = s_time - datetime.now()  # get current time and by the difference taking the time difference
+            time = datetime.now() - s_time  # get current time and by the difference taking the time difference
             line.insert(0,time.microseconds)   # insert time into the first position of the list of data
 
             """ in the below 5 lines the data in the list called line is converted to floats"""
@@ -83,12 +83,21 @@ while True:
             # writing the fields
             csvwriter.writerow(all_data_for_a_test)
 
+        with open(str(datetime.now().timestamp()),'w')  as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow(['time','ax','ay','az','gx','gy','gz'])
+            # writing the fields
+            csvwriter.writerows(all_data_for_a_test)
+
         print("_____",len(all_data_for_a_test)) # to check how many data point are there not necessary
+
 
     elif command == 'f':  # end the program if the command m is issued
         break
 
 ser.close() # close the comport
+
+
 
 
 """
